@@ -31,6 +31,10 @@ public class TournamentService {
         log.info("MVP IS " + tournament.getMvp().nickName());
     }
 
+    /**
+     * In this procedure MVP player determines and sets to tournament field.
+     * @param tournament
+     */
     public void determineMVP(Tournament tournament) {
        Set<MVPRecord> mvpRecords = new HashSet<>();
        for (Game game:tournament.getGames()){
@@ -47,11 +51,20 @@ public class TournamentService {
         tournament.setMvp(Collections.max(myMap.entrySet(), Map.Entry.comparingByValue()).getKey());
     }
 
+    /**
+     * This function gets set of files and calls processing of them
+     * @param tournament
+     */
     public void fillTournament(Tournament tournament){
         Set<File> files = filesService.getFileNames();
         addGamesToTournament(files, tournament);
     }
 
+    /**
+     * This function calls process of reading info from files and mapping it to games.
+     * @param files
+     * @param tournament
+     */
     public void addGamesToTournament(Set<File> files, Tournament tournament){
         files.stream()
                 .forEach(file->gameService.addGameToTournament(file, tournament, factory));

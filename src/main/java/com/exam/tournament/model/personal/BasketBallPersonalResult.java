@@ -4,6 +4,9 @@ import lombok.EqualsAndHashCode;
 import lombok.Value;
 import lombok.experimental.SuperBuilder;
 
+/**
+ * Class is user to store information about player results in basketball one game
+ */
 @Value
 @EqualsAndHashCode(callSuper = true)
 @SuperBuilder

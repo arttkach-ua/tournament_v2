@@ -25,6 +25,12 @@ public class PersonalResultServiceFactory {
 
     private final ApplicationContext context;
     private static final Map<GameTypes, PersonalResultService> serviceMap = new EnumMap<>(GameTypes.class);
+
+    /**
+     * Determines service that will process personal info data.
+     * @param gameType
+     * @return
+     */
     public PersonalResultService getPersonalResultService(GameTypes gameType) {
         return Optional.of(serviceMap.get(gameType))
                 .orElseThrow(()->new TournamentProcessingException(String.format(ErrorMessages.GAME_NOT_SUPPORTED,gameType)));
