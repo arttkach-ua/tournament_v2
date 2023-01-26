@@ -60,15 +60,26 @@ public class GameService {
                 .ofNullable(supportedGameTypes.get(name.toUpperCase()))
                 .orElseThrow(()->constructTournamentProcessingException(name));
     }
+
+    /**
+     * Creates new tournament processing exception with message that game is not supported
+     * @param name
+     * @return
+     */
     private TournamentProcessingException constructTournamentProcessingException(String name) {
         return new TournamentProcessingException(String.format(ErrorMessages.GAME_NOT_SUPPORTED, name));
     }
 
+    /**
+     * Calculates game winner
+     * @param game
+     * @param gameData
+     * @return - team who won the game
+     */
     public Team getGameWinner(Game game, List<List<String>> gameData){
         Map<Team, Integer> teamScores = getTeamScores(game, gameData);
         return Collections.max(teamScores.entrySet(), Map.Entry.comparingByValue()).getKey();
 }
-
 
     /**
      * Calculates team scores and returns it as Map
@@ -100,10 +111,24 @@ public class GameService {
         fillPersonalResults(game, gameData, personalResultService);
     }
 
+    /**
+     * Fills personal results from array with information to game.
+     * @param game
+     * @param gameData
+     * @param personalResultService
+     */
     public void fillPersonalResults(Game game, List<List<String>> gameData, PersonalResultService personalResultService) {
         game.getTeams().stream()
                 .forEach(team ->team.setPersonalResults(collectPersonalResultsForTeam(team,gameData,personalResultService)));
     }
+
+    /**
+     * Creates a set of personal results for team
+     * @param team
+     * @param gameData
+     * @param personalResultService
+     * @return
+     */
     private Set<PersonalResult> collectPersonalResultsForTeam(Team team, List<List<String>> gameData, PersonalResultService personalResultService){
         return gameData.stream()
                 .skip(1)
@@ -117,6 +142,11 @@ public class GameService {
         supportedGameTypes.put("BASKETBALL", GameTypes.BASKETBALL);
     }
 
+    /**
+     * Creates a set of new teams that took part in game
+     * @param gameData
+     * @return
+     */
     public Set<Team> createTeams(List<List<String>> gameData){
         return gameData.stream()
         .skip(1)
@@ -127,6 +157,13 @@ public class GameService {
                 .collect(Collectors.toSet());
     }
 
+    /**
+     * Calculates a winner bonus for team in one game.
+     * Winner bonus is the same for basketball and handball games(10 points for each player)
+     * @param game
+     * @param team
+     * @return
+     */
     public int getWinnerBonus(Game game, Team team){
         int bonus = 0;
         if (team.equals(game.getWinner())){
