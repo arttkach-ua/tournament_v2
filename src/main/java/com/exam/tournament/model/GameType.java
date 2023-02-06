@@ -1,6 +1,6 @@
 package com.exam.tournament.model;
 
-public enum GameTypes {
+public enum GameType {
     BASKETBALL,
     HANDBALL
 }

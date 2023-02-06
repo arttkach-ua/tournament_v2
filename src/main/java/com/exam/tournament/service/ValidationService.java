@@ -14,15 +14,10 @@ public class ValidationService {
     private static final String SUPPORTED_FORMAT = "csv";
     private final FilesService filesService;
 
-    /**
-     * Validates file input file for supported format(ctv by default).
-     * If validation failed throws {@link IllegalArgumentException}
-     * @param file
-     */
-    public void validateForCSV(File file){
+    public void validateForCSV(File file) {
         String fileFormat = filesService.identifyFileType(file);
-        if (!SUPPORTED_FORMAT.equals(fileFormat)){
-            throw new IllegalArgumentException(String.format(ErrorMessages.TYPE_OF_FILE_NOT_SUPPORTED,fileFormat));
+        if (!SUPPORTED_FORMAT.equals(fileFormat)) {
+            throw new IllegalArgumentException(String.format(ErrorMessages.TYPE_OF_FILE_NOT_SUPPORTED, fileFormat));
         }
     }
 }

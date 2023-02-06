@@ -1,15 +1,14 @@
 package com.exam.tournament.model;
 
-import lombok.Data;
+import lombok.Builder;
+import lombok.Value;
 
 import java.util.Set;
 
-/**
- * Class is used to store info about one game
- */
-@Data
+@Value
+@Builder
 public class Game {
-    private GameTypes type;
-    private Set<Team> teams;
-    private Team winner;
+    GameType type;
+    Set<Team> teams;
+    Team winner;
 }

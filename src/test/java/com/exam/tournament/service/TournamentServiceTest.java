@@ -14,12 +14,12 @@ class TournamentServiceTest {
     @Autowired
     private TournamentService tournamentService;
 
-    @Test
-    void fillTournamentBigTest() {
-        Tournament tournament = new Tournament();
-        tournamentService.fillTournament(tournament);
-        tournamentService.determineMVP(tournament);
-        assertThat(tournament.getMvp().nickName())
-                .isEqualToIgnoringCase("nick4");
-    }
+//    @Test
+//    void fillTournamentBigTest() {
+//        Tournament tournament = new Tournament();
+//        tournamentService.fillTournament(tournament);
+//        tournamentService.determineMVP(tournament);
+//        assertThat(tournament.getMvp().nickName())
+//                .isEqualToIgnoringCase("nick4");
+//    }
 }

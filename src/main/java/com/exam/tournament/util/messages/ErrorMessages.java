@@ -11,4 +11,5 @@ public class ErrorMessages {
     public static final String NULL_GAME_NAME = "Game name can't be null";
     public static final String NULL_GAME_TYPE = "Game type can't be null";
     public static final String TEAM_NOT_FOUND = "Team %s not found";
+    public static final String CONTAINER_LENGTH_NOT_VALID = "Container length is not valid";
 }
