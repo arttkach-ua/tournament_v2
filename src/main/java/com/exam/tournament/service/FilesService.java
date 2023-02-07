@@ -1,10 +1,10 @@
 package com.exam.tournament.service;
 
 import com.exam.tournament.exceptions.TournamentProcessingException;
-import com.exam.tournament.providers.MapperProvider;
 import com.exam.tournament.mappers.PlayerInfoContainerMapper;
 import com.exam.tournament.model.container.GameInfoContainer;
 import com.exam.tournament.model.container.player.PlayerInfoContainer;
+import com.exam.tournament.providers.MapperProvider;
 import com.exam.tournament.util.messages.ErrorMessages;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -17,29 +17,29 @@ import org.springframework.stereotype.Service;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static com.exam.tournament.util.messages.ErrorMessages.NULL_DIRECTORY;
 
 @Service
 @Log4j2
 @PropertySource("classpath:application.properties")
 @RequiredArgsConstructor
 public class FilesService {
+    private static final String COMMA_DELIMITER = ";";
+    private final MapperProvider mapperProvider;
     @Getter
     @Value("${files.location}")
     private String dir;
 
-    private final MapperProvider mapperProvider;
-
-    private static final String COMMA_DELIMITER = ";";
-
     public Set<File> getFileNames() {
         log.debug("Get files names call");
-        return Stream.of(new File(dir).listFiles())
+        if (dir==null){
+            throw new TournamentProcessingException(NULL_DIRECTORY);
+        }
+        return Stream.of(Objects.requireNonNull(new File(dir).listFiles()))
                 .filter(file -> !file.isDirectory())
                 .map(File::getAbsoluteFile)
                 .collect(Collectors.toSet());
@@ -60,20 +60,20 @@ public class FilesService {
     }
 
     @SneakyThrows
-    public GameInfoContainer transformCSV(final File file){
+    public GameInfoContainer transformCSV(final File file) {
         String gameType;
         Set<PlayerInfoContainer> personalContainers;
 
         try (BufferedReader br = new BufferedReader(new FileReader(file.getAbsolutePath()))) {
             gameType = br.lines()
                     .findFirst()
-                    .orElseThrow(()->new TournamentProcessingException(ErrorMessages.WRONG_FILE_DATA));
+                    .orElseThrow(() -> new TournamentProcessingException(ErrorMessages.WRONG_FILE_DATA));
             PlayerInfoContainerMapper mapper = mapperProvider.getMapper(gameType);
             personalContainers = br.lines()
-                    .map(line->(PlayerInfoContainer)mapper.toContainer(line.split(COMMA_DELIMITER)))
+                    .map(line ->(PlayerInfoContainer) mapper.toContainer(line.split(COMMA_DELIMITER)))
                     .collect(Collectors.toSet());
         }
-        return new GameInfoContainer(gameType,personalContainers);
+        return new GameInfoContainer(gameType, personalContainers);
     }
 
     public String identifyFileType(File file) {

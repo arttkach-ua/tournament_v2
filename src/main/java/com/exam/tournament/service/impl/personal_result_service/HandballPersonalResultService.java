@@ -21,7 +21,6 @@ import static java.lang.Integer.parseInt;
 @Log4j2
 @RequiredArgsConstructor
 public class HandballPersonalResultService implements PersonalResultService<HandBallPersonalResult, HandballPlayerInfoContainer> {
-    private final GameService gameService;
 
     @Override
     public PersonalResult createPersonalResult(List<String> playerInfo) {
@@ -33,7 +32,7 @@ public class HandballPersonalResultService implements PersonalResultService<Hand
     }
 
     @Override
-    public Integer calculateMVPPoints(Game game, Team team, HandBallPersonalResult personalResult) {
+    public Integer calculateMVPPoints(Game game, Team team, HandBallPersonalResult personalResult, GameService gameService) {
         int goalsMadeMultiplier = 2;
         int goalsReceivedMultiplier = -1;
 
@@ -42,14 +41,16 @@ public class HandballPersonalResultService implements PersonalResultService<Hand
                 gameService.getWinnerBonus(game, team);
         return Math.max(points, 0);
     }
+
     @Override
-    public HandBallPersonalResult createPersonalResult(HandballPlayerInfoContainer container){
+    public HandBallPersonalResult createPersonalResult(HandballPlayerInfoContainer container) {
         return HandBallPersonalResult.builder()
                 .player(new Player(container.getNickName()))
                 .goalsMade(parseInt(container.getGoalsMade()))
                 .goalsReceived(parseInt(container.getGoalsReceived()))
                 .build();
     }
+
     @Override
     public GameType getGameType() {
         return GameType.HANDBALL;

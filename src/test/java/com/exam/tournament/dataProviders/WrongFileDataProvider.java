@@ -1,4 +1,3 @@
-
 package com.exam.tournament.dataProviders;
 
 import org.springframework.beans.factory.annotation.Value;

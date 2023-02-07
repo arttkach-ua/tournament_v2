@@ -3,6 +3,7 @@ package com.exam.tournament.model.personal;
 import lombok.EqualsAndHashCode;
 import lombok.Value;
 import lombok.experimental.SuperBuilder;
+
 @Value
 @EqualsAndHashCode(callSuper = true)
 @SuperBuilder

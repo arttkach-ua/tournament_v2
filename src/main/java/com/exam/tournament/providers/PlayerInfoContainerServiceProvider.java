@@ -32,6 +32,6 @@ public class PlayerInfoContainerServiceProvider {
     public PlayerInfoContainerService<? extends PlayerInfoContainer> getService(GameType gameName) {
         return Optional
                 .ofNullable(services.get(gameName))
-                .orElseThrow(() -> new TournamentProcessingException(String.format(GAME_NOT_SUPPORTED,gameName)));
+                .orElseThrow(() -> new TournamentProcessingException(String.format(GAME_NOT_SUPPORTED, gameName)));
     }
 }

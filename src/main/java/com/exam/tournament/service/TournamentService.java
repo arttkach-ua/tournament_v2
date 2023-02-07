@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 public class TournamentService {
     private final PersonalResultServiceProvider factory;
     private final FilesService filesService;
-    private final TempService tempService;
+    private final GameService gameService;
 
     public void processTournament() {
         Set<File> files = filesService.getFileNames();
@@ -29,7 +29,7 @@ public class TournamentService {
                 .map(filesService::transformCSV)
                 .collect(Collectors.toSet());
         Set<Game> games = gameInfoContainers.stream()
-                .map(tempService::createGame)
+                .map(gameService::createGame)
                 .collect(Collectors.toSet());
         Tournament t = new Tournament(games);
         Player mvp = determineMVP(t);
@@ -43,7 +43,7 @@ public class TournamentService {
             PersonalResultService personalResultService = factory.getPersonalResultService(game.getType());
             for (Team team : game.getTeams()) {
                 for (PersonalResult pr : team.getPersonalResults()) {
-                    mvpRecords.add(new MVPRecord(pr.getPlayer(), personalResultService.calculateMVPPoints(game, team, pr), game));
+                    mvpRecords.add(new MVPRecord(pr.getPlayer(), personalResultService.calculateMVPPoints(game, team, pr, gameService), game));
                 }
             }
         }

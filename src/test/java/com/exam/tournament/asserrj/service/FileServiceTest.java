@@ -39,7 +39,7 @@ class FileServiceTest {
     }
 
     @Test
-    void transformCSVTest(){
+    void transformCSVTest() {
         GameInfoContainer container = filesService.transformCSV(fileDataProvider.getBasketBallTestFile());
         assertThat(container)
                 .hasFieldOrPropertyWithValue("gameType", "BASKETBALL");
@@ -47,7 +47,7 @@ class FileServiceTest {
                 .size().isEqualTo(6);
         Set<BasketBallPersonalResult> personalResultSet = container.getPlayersInfo()
                 .stream()
-                .map(info->personalResultService.createPersonalResult((BasketballPlayerInfoContainer) info))
+                .map(info -> personalResultService.createPersonalResult((BasketballPlayerInfoContainer) info))
                 .collect(Collectors.toSet());
         int a = 0;
     }

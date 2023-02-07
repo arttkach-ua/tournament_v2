@@ -10,12 +10,13 @@ import static com.exam.tournament.util.messages.ErrorMessages.CONTAINER_LENGTH_N
 
 @Component
 public class HandBallPlayerInfoContainerMapper implements PlayerInfoContainerMapper {
-    private final static int PLAYER_NAME_POSITION = 0;
-    private final static int NICK_NAME_POSITION = 1;
-    private final static int NUMBER_POSITION = 2;
-    private final static int TEAM_POSITION = 3;
-    private final static int GOALS_MADE_POSITION = 4;
-    private final static int GOALS_RECEIVED_POSITION = 5;
+    private static final int PLAYER_NAME_POSITION = 0;
+    private static final int NICK_NAME_POSITION = 1;
+    private static final int NUMBER_POSITION = 2;
+    private static final int TEAM_POSITION = 3;
+    private static final int GOALS_MADE_POSITION = 4;
+    private static final int GOALS_RECEIVED_POSITION = 5;
+
     @Override
     public HandballPlayerInfoContainer toContainer(String[] rowValues) {
         validateRowValues(rowValues);
@@ -29,8 +30,9 @@ public class HandBallPlayerInfoContainerMapper implements PlayerInfoContainerMap
                 .goalsReceived(rowValues[GOALS_RECEIVED_POSITION])
                 .build();
     }
+
     private void validateRowValues(@NonNull final String[] rowValues) {
-        if (rowValues.length!=6){
+        if (rowValues.length != 6) {
             throw new TournamentProcessingException(CONTAINER_LENGTH_NOT_VALID);
         }
     }

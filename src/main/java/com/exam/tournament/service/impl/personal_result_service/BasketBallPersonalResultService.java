@@ -21,7 +21,6 @@ import static java.lang.Integer.parseInt;
 @Log4j2
 @RequiredArgsConstructor
 public class BasketBallPersonalResultService implements PersonalResultService<BasketBallPersonalResult, BasketballPlayerInfoContainer> {
-    private final GameService gameService;
 
     @Override
     public PersonalResult createPersonalResult(List<String> playerInfo) {
@@ -34,7 +33,7 @@ public class BasketBallPersonalResultService implements PersonalResultService<Ba
     }
 
     @Override
-    public Integer calculateMVPPoints(Game game, Team team, BasketBallPersonalResult personalResult) {
+    public Integer calculateMVPPoints(Game game, Team team, BasketBallPersonalResult personalResult, GameService gameService) {
         int pointScoredMultiplier = 2;
         int reboundMultiplier = 1;
         int assistMultiplier = 1;

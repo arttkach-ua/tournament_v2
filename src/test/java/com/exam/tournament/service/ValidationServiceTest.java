@@ -2,8 +2,6 @@ package com.exam.tournament.service;
 
 import com.exam.tournament.dataProviders.FileDataProvider;
 import com.exam.tournament.dataProviders.WrongFileDataProvider;
-import com.exam.tournament.service.ValidationService;
-import lombok.AllArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,12 +25,13 @@ class ValidationServiceTest {
     @Test
     void validateForCSVCorrectFile() {
         File testFile = fileDataProvider.getBasketBallTestFile();
-        assertDoesNotThrow(()->validationService.validateForCSV(testFile));
+        assertDoesNotThrow(() -> validationService.validateForCSV(testFile));
     }
+
     @Test
     void validateForCSVWrongFileFormat() {
         File testFile = wrongFileDataProvider.getWrongTestFile();
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,()->validationService.validateForCSV(testFile));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> validationService.validateForCSV(testFile));
         assertEquals("Type txt not supported", ex.getMessage());
     }
 }

@@ -12,7 +12,7 @@ public interface PersonalResultService<T extends PersonalResult, S extends Playe
 
     PersonalResult createPersonalResult(List<String> playerInfo);
 
-    Integer calculateMVPPoints(Game game, Team team, T personalResult);
+    Integer calculateMVPPoints(Game game, Team team, T personalResult, GameService gameService);
 
     GameType getGameType();
 

@@ -7,6 +7,7 @@ import com.exam.tournament.model.Player;
 import com.exam.tournament.model.Team;
 import com.exam.tournament.model.personal.HandBallPersonalResult;
 import com.exam.tournament.model.personal.PersonalResult;
+import com.exam.tournament.service.GameService;
 import com.exam.tournament.service.impl.personal_result_service.HandballPersonalResultService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,14 +25,17 @@ class HandballPersonalResultServiceTest {
     @Autowired
     private GameDataProvider gameDataProvider;
 
+    @Autowired
+    private GameService gameService;
+
     @Test
     void createPersonalResult() {
         PersonalResult pr = personalResultService.createPersonalResult(gameDataProvider.getHandBallDataAsFromFile().get(1));
         assertThat(pr)
-                .hasFieldOrPropertyWithValue("goalsMade",0)
-                .hasFieldOrPropertyWithValue("goalsReceived",20);
+                .hasFieldOrPropertyWithValue("goalsMade", 0)
+                .hasFieldOrPropertyWithValue("goalsReceived", 20);
         assertThat(pr.getPlayer())
-                .hasFieldOrPropertyWithValue("nickName","nick1");
+                .hasFieldOrPropertyWithValue("nickName", "nick1");
     }
 
     @Test
@@ -51,11 +55,12 @@ class HandballPersonalResultServiceTest {
                 .name("Fil")
                 .personalResults(new HashSet<>())
                 .build();
-        Game game = new Game();
-        game.setTeams(Set.of(team1,team2));
-        game.setType(GameType.HANDBALL);
-        game.setWinner(team1);
-        Integer points = personalResultService.calculateMVPPoints(game, team1, pr);
+        Game game = Game.builder()
+                .teams(Set.of(team1, team2))
+                .type(GameType.HANDBALL)
+                .winner(team1)
+                .build();
+        Integer points = personalResultService.calculateMVPPoints(game, team1, pr, gameService);
         assertThat(points).
                 isEqualTo(40);
     }
