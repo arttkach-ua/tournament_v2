@@ -9,6 +9,7 @@ public class ErrorMessages {
     public static final String GAME_NOT_SUPPORTED = "Game %s is not supported. Please contact your administrator";
     public static final String WRONG_FILE_DATA = "Wrong file data";
     public static final String NULL_GAME_NAME = "Game name can't be null";
-    public static final String NULL_GAME_TYPE = "Game type can't be null";
+    public static final String NULL_DIRECTORY = "Directory can't be null";
     public static final String TEAM_NOT_FOUND = "Team %s not found";
+    public static final String CONTAINER_LENGTH_NOT_VALID = "Container length is not valid";
 }

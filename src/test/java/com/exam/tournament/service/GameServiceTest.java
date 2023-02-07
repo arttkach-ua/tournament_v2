@@ -4,15 +4,15 @@ import com.exam.tournament.dataProviders.FileDataProvider;
 import com.exam.tournament.dataProviders.GameDataProvider;
 import com.exam.tournament.exceptions.TournamentProcessingException;
 import com.exam.tournament.model.Game;
-import com.exam.tournament.model.GameTypes;
+import com.exam.tournament.model.GameType;
 import com.exam.tournament.model.Team;
-import com.exam.tournament.model.Tournament;
+import com.exam.tournament.providers.PersonalResultServiceProvider;
+import com.exam.tournament.service.impl.player_info_container_service.player_info_container_service.BasketBallPlayerInfoContainerService;
 import com.exam.tournament.util.messages.ErrorMessages;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -28,44 +28,47 @@ class GameServiceTest {
     @Autowired
     private GameDataProvider gameDataProvider;
     @Autowired
-    private PersonalResultServiceFactory factory;
+    private PersonalResultServiceProvider factory;
+    @Autowired
+    private BasketBallPlayerInfoContainerService basketBallPlayerInfoContainerService;
 
     @Test
     void getGameTypeByNameHandBallTest() {
-        GameTypes result = gameService.getGameTypeByName("HANDBALL");
+        GameType result = gameService.getGameTypeByName("HANDBALL");
         assertThat(result)
-                .isEqualTo(GameTypes.HANDBALL);
+                .isEqualTo(GameType.HANDBALL);
 
-        GameTypes result1 = gameService.getGameTypeByName("handball");
+        GameType result1 = gameService.getGameTypeByName("handball");
         assertThat(result1)
-                .isEqualTo(GameTypes.HANDBALL);
+                .isEqualTo(GameType.HANDBALL);
     }
 
     @Test
     void getGameTypeByNameBasketBallTest() {
-        GameTypes result = gameService.getGameTypeByName("BASKETBALL");
+        GameType result = gameService.getGameTypeByName("BASKETBALL");
         assertThat(result)
-                .isEqualTo(GameTypes.BASKETBALL);
+                .isEqualTo(GameType.BASKETBALL);
 
-        GameTypes result1 = gameService.getGameTypeByName("basketball");
+        GameType result1 = gameService.getGameTypeByName("basketball");
         assertThat(result1)
-                .isEqualTo(GameTypes.BASKETBALL);
+                .isEqualTo(GameType.BASKETBALL);
 
         assertThat(gameService.getGameTypeByName("basKETball"))
-                .isEqualTo(GameTypes.BASKETBALL);
+                .isEqualTo(GameType.BASKETBALL);
     }
 
     @Test
     void getGameTypeByNameNULLTest() {
-        assertThatThrownBy(()->gameService.getGameTypeByName(null)).
+        assertThatThrownBy(() -> gameService.getGameTypeByName(null)).
                 isInstanceOf(TournamentProcessingException.class)
                 .hasMessage(ErrorMessages.NULL_GAME_NAME);
     }
+
     @Test
     void getGameTypeByNameNotSupportedGameTest() {
         String game = "football";
         String expectedErrorMessage = "Game football is not supported. Please contact your administrator";
-        assertThatThrownBy(()->gameService.getGameTypeByName(game)).
+        assertThatThrownBy(() -> gameService.getGameTypeByName(game)).
                 isInstanceOf(TournamentProcessingException.class)
                 .hasMessage(expectedErrorMessage);
     }
@@ -74,48 +77,13 @@ class GameServiceTest {
     void getTeamScoresTest() {
         Team team1 = Team.builder().name("Team A").build();
         Team team2 = Team.builder().name("Team B").build();
-        Game game = new Game();
-        game.setTeams(Set.of(team1,team2));
+        Game game = Game.builder()
+                .teams(Set.of(team1, team2))
+                .build();
 
-        Map<Team, Integer> result = gameService.getTeamScores(game, gameDataProvider.getBasketBallDataAsFromFile());
+        Map<Team, Integer> result = gameService.getTeamScores(basketBallPlayerInfoContainerService, Set.of(team1, team2), gameDataProvider.getBasketBallInfoContainers());
         assertThat(result)
-                .containsEntry(team1,25)
-                .containsEntry(team2,32);
-    }
-
-
-    @Test
-    void setGameTypeNormalCaseTest() {
-        Game game = new Game();
-        List<String> testData = List.of("BASKETBALL");
-        gameService.setGameType(game, testData);
-        assertThat(game).
-                hasFieldOrPropertyWithValue("type", GameTypes.BASKETBALL);
-    }
-    @Test
-    void setGameTypeToBigListCaseTest() {
-        Game game = new Game();
-        List<String> testData = List.of("BASKETBALL", "Some wrong data");
-        String expectedErrorMessage = "Wrong file data";
-        assertThatThrownBy(()->gameService.setGameType(game, testData))
-                .isInstanceOf(TournamentProcessingException.class)
-                .hasMessage(expectedErrorMessage);
-    }
-    @Test
-    void setGameTypeWrongTextCaseTest() {
-        String expectedErrorMessage = "Game BASSSKETBALL is not supported. Please contact your administrator";
-                Game game = new Game();
-        List<String> testData = List.of("BASSSKETBALL");
-        assertThatThrownBy(()->gameService.setGameType(game, testData))
-                .isInstanceOf(TournamentProcessingException.class)
-                .hasMessage(expectedErrorMessage);
-    }
-
-    @Test
-    void addGameToTournamentTest(){
-        Tournament tournament = new Tournament();
-        gameService.addGameToTournament(fileDataProvider.getBasketBallTestFile(), tournament,factory);
-        assertThat(tournament.getGames())
-                .size().isEqualTo(1);
+                .containsEntry(team1, 25)
+                .containsEntry(team2, 32);
     }
 }

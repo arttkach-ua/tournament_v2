@@ -27,10 +27,11 @@ class TeamServiceTest {
 
     @Test
     void getTeamFromGameTeamExistsTest() {
-        Game game = new Game();
         Team team1 = Team.builder().name("test team 1").build();
         Team team2 = Team.builder().name("test team 2").build();
-        game.setTeams(Set.of(team1,team2));
+        Game game = Game.builder()
+                .teams(Set.of(team1, team2))
+                .build();
         Team resultTeam = teamService.getTeamFromGame(game, "test team 1");
         assertThat(resultTeam)
                 .isEqualTo(team1);
@@ -40,12 +41,13 @@ class TeamServiceTest {
 
     @Test
     void getTeamFromGameTeamDoesNotExistTest() {
-        Game game = new Game();
         Team team1 = Team.builder().name("test team 1").build();
         Team team2 = Team.builder().name("test team 2").build();
-        game.setTeams(Set.of(team1,team2));
-        assertThatThrownBy(()->teamService.getTeamFromGame(game, "test team 3")).
-            isInstanceOf(TournamentProcessingException.class)
+        Game game = Game.builder()
+                .teams(Set.of(team1, team2))
+                .build();
+        assertThatThrownBy(() -> teamService.getTeamFromGame(game, "test team 3")).
+                isInstanceOf(TournamentProcessingException.class)
                 .hasMessage("Team test team 3 not found");
     }
 }

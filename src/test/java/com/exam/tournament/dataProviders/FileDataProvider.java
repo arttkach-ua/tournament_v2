@@ -13,10 +13,18 @@ public class FileDataProvider {
     @Value("${files.location}")
     private String dir;
 
-    public final File getBasketBallTestFile(){
+    public final File getBasketBallTestFile() {
         StringJoiner joiner = new StringJoiner("//");
         joiner.add(dir);
         joiner.add("b1.csv");
+
+        return new File(joiner.toString());
+    }
+
+    public final File getHandBallTestFile() {
+        StringJoiner joiner = new StringJoiner("//");
+        joiner.add(dir);
+        joiner.add("g1.csv");
 
         return new File(joiner.toString());
     }
